@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xyz.kristo.projectx.smartid.dao.SmartIdDao">
+    <insert id="createSmartIdAuthenticationMethod">
+        INSERT INTO smartid_authentication_method (
+            account_id,
+            country_code,
+            identity_code
+        ) VALUES (
+            #{accountId},
+            #{method.countryCode},
+            #{method.identityCode}
+        )
+    </insert>
+
+    <select id="findSmartIdAuthenticationMethod"
+            parameterType="xyz.kristo.projectx.smartid.model.SmartIdAuthenticationMethod"
+            resultType="xyz.kristo.projectx.smartid.model.SmartIdAuthenticationMethod"
+    >
+        SELECT
+            account_id,
+            country_code,
+            identity_code
+        FROM smartid_authentication_method
+        WHERE
+            country_code = #{method.countryCode} AND
+            identity_code = #{method.identityCode}
+    </select>
+</mapper>

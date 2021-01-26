@@ -1,0 +1,14 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    info.enabled: true
+    health.enabled: true
+
+authentication:
+  jwtSecret: ${JWT_SECRET}

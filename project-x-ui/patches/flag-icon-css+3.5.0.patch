@@ -1,0 +1,13 @@
+diff --git a/node_modules/flag-icon-css/less/flag-icon-base.less b/node_modules/flag-icon-css/less/flag-icon-base.less
+index ac2d014..596dd82 100644
+--- a/node_modules/flag-icon-css/less/flag-icon-base.less
++++ b/node_modules/flag-icon-css/less/flag-icon-base.less
+@@ -5,7 +5,7 @@
+ }
+ 
+ .flag-icon {
+-  .flag-icon-background;
++  .flag-icon-background();
+   position: relative;
+   display: inline-block;
+   width: unit((4 / 3), em);

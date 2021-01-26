@@ -1,0 +1,41 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    info.enabled: true
+    health.enabled: true
+
+hikari:
+  jdbc-url: ${DATABASE_URL}
+  driver-class-name: org.postgresql.Driver
+  auto-commit: false
+  maximum-pool-size: 1
+
+liquibase:
+  enabled: true
+  change-log: classpath:liquibase/master.xml
+  contexts: prod
+
+mybatis:
+  map-underscore-to-camel-case: true
+  cache-enabled: false
+  local-cache-scope: STATEMENT
+
+mobileId:
+  hostUrl: https://tsp.demo.sk.ee/mid-api
+  relyingPartyUuid: 00000000-0000-0000-0000-000000000000
+  relyingPartyName: DEMO
+  certificates: >
+    /certificates/demo/TEST_of_ESTEID-SK_2011.pem.crt,
+    /certificates/demo/TEST_of_ESTEID-SK_2015.pem.crt
+  sslCertificates: >
+    /certificates/demo/ssl/tsp.demo.sk.pem.cer
+
+services:
+  account: http://127.0.0.1:8081
+  auth: http://127.0.0.1:8082

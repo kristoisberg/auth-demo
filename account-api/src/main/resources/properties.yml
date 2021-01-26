@@ -1,0 +1,27 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    info.enabled: true
+    health.enabled: true
+
+hikari:
+  jdbc-url: ${DATABASE_URL}
+  driver-class-name: org.postgresql.Driver
+  auto-commit: false
+  maximum-pool-size: 1
+
+liquibase:
+  enabled: true
+  change-log: classpath:liquibase/master.xml
+  contexts: prod
+
+mybatis:
+  map-underscore-to-camel-case: true
+  cache-enabled: false
+  local-cache-scope: STATEMENT

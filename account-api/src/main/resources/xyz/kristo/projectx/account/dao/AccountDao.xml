@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xyz.kristo.projectx.account.dao.AccountDao">
+    <insert id="createAccount"
+            parameterType="xyz.kristo.projectx.account.model.Account"
+            useGeneratedKeys="true"
+            keyProperty="accountId"
+            keyColumn="account_id"
+    >
+        INSERT INTO account (
+            username,
+            email
+        ) VALUES (
+            #{account.username},
+            #{account.email}
+        )
+    </insert>
+
+    <select id="isUsernameInUse" parameterType="string" resultType="boolean">
+        SELECT
+            COUNT(*) > 0
+        FROM account
+        WHERE
+            LOWER(username) = LOWER(#{username})
+    </select>
+
+    <select id="isEmailInUse" parameterType="string" resultType="boolean">
+        SELECT
+            COUNT(*) > 0
+        FROM account
+        WHERE
+            LOWER(email) = LOWER(#{email})
+    </select>
+
+    <select id="findAccountByUsernameOrEmail"
+            parameterType="string"
+            resultType="xyz.kristo.projectx.account.model.Account"
+    >
+        SELECT
+            account_id,
+            username,
+            email
+        FROM account
+        WHERE
+            username = #{usernameOrEmail} OR
+            email = #{usernameOrEmail}
+    </select>
+
+    <select id="findAccountById" parameterType="long" resultType="xyz.kristo.projectx.account.model.Account">
+        SELECT
+            account_id,
+            username,
+            email
+        FROM account
+        WHERE
+            account_id = #{accountId}
+    </select>
+</mapper>

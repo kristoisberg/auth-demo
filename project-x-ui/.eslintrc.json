@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "plugins": ["prettier"],
+  "extends": ["airbnb", "airbnb/hooks", "plugin:prettier/recommended", "prettier/react"],
+  "rules": {
+    "react/forbid-prop-types": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
+    "react/jsx-props-no-spreading": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {},
+      "webpack": {},
+      "alias": {
+        "map": [
+          ["components", "./src/components"],
+          ["constants", "./src/constants"],
+          ["form", "./src/components/form"],
+          ["hooks", "./src/hooks"]
+        ]
+      }
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true
+  }
+}
