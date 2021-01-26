@@ -26,13 +26,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.kristo.projectx.account.client.AccountClient;
+import xyz.kristo.projectx.account.client.dto.Account;
+import xyz.kristo.projectx.account.client.dto.CreateAccountRequest;
+import xyz.kristo.projectx.account.client.dto.FindAccountByIdRequest;
+import xyz.kristo.projectx.auth.client.AuthClient;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationRequest;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
 import xyz.kristo.projectx.mobileid.dao.MobileIdDao;
 import xyz.kristo.projectx.mobileid.exception.BusinessException;
-import xyz.kristo.projectx.mobileid.model.Account;
-import xyz.kristo.projectx.mobileid.model.AuthenticationRequest;
-import xyz.kristo.projectx.mobileid.model.AuthenticationResponse;
-import xyz.kristo.projectx.mobileid.model.CreateAccountRequest;
-import xyz.kristo.projectx.mobileid.model.FindAccountByIdRequest;
 import xyz.kristo.projectx.mobileid.model.MobileIdAuthenticationMethod;
 import xyz.kristo.projectx.mobileid.model.MobileIdDoLoginRequest;
 import xyz.kristo.projectx.mobileid.model.MobileIdDoRegisterRequest;
@@ -46,8 +48,8 @@ import xyz.kristo.projectx.mobileid.model.MobileIdInitRegisterRequest;
 @RequiredArgsConstructor
 public class MobileIdService {
     private final MobileIdDao mobileIdDao;
-    private final AccountService accountService;
-    private final AuthService authService;
+    private final AccountClient accountClient;
+    private final AuthClient authClient;
     private final MidClient mobileIdClient;
     private final MidAuthenticationResponseValidator responseValidator;
 
@@ -64,7 +66,7 @@ public class MobileIdService {
             throw new BusinessException("Your Mobile-ID account is not linked to any account!");
         }
 
-        Account account = accountService.findAccountById(new FindAccountByIdRequest(method.getAccountId()));
+        Account account = accountClient.findAccountById(new FindAccountByIdRequest(method.getAccountId()));
 
         if (account == null) {
             throw new BusinessException("Account not found!");
@@ -74,14 +76,15 @@ public class MobileIdService {
     }
 
     public MobileIdInitResponse initRegister(MobileIdInitRegisterRequest request) {
-        accountService.validateAccountData(new CreateAccountRequest(request.getUsername(), request.getEmail()));
+        accountClient.validateAccountData(new CreateAccountRequest(request.getUsername(), request.getEmail()));
         return initAuthentication(request.getPhoneNumber(), request.getIdentityCode());
     }
 
     public AuthenticationResponse doRegister(MobileIdDoRegisterRequest request) {
         MidAuthenticationIdentity identity = doAuthentication(request.getSessionId(), request.getAuthenticationHash());
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest(request.getUsername(), request.getEmail());
 
-        accountService.validateAccountData(new CreateAccountRequest(request.getUsername(), request.getEmail()));
+        accountClient.validateAccountData(createAccountRequest);
 
         MobileIdAuthenticationMethod method = mobileIdDao.findMobileIdAuthenticationMethod(
                 new MobileIdAuthenticationMethod(identity.getCountry(), identity.getIdentityCode()));
@@ -90,9 +93,7 @@ public class MobileIdService {
             throw new BusinessException("Your Mobile-ID account is already linked to another account!");
         }
 
-        Account account = accountService.createAccount(
-                new CreateAccountRequest(request.getUsername(), request.getEmail())
-        );
+        Account account = accountClient.createAccount(createAccountRequest);
 
         mobileIdDao.createMobileIdAuthenticationMethod(
                 account.getAccountId(), new MobileIdAuthenticationMethod(identity.getCountry(), identity.getIdentityCode()));
@@ -162,7 +163,7 @@ public class MobileIdService {
     }
 
     private AuthenticationResponse authenticate(Account account) {
-        return authService.authenticate(
+        return authClient.authenticate(
                 new AuthenticationRequest(account.getAccountId(), account.getUsername(), account.getEmail())
         );
     }

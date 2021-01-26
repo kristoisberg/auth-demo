@@ -21,13 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.kristo.projectx.account.client.AccountClient;
+import xyz.kristo.projectx.account.client.dto.Account;
+import xyz.kristo.projectx.account.client.dto.CreateAccountRequest;
+import xyz.kristo.projectx.account.client.dto.FindAccountByIdRequest;
+import xyz.kristo.projectx.auth.client.AuthClient;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationRequest;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
 import xyz.kristo.projectx.smartid.dao.SmartIdDao;
 import xyz.kristo.projectx.smartid.exception.BusinessException;
-import xyz.kristo.projectx.smartid.model.Account;
-import xyz.kristo.projectx.smartid.model.AuthenticationRequest;
-import xyz.kristo.projectx.smartid.model.AuthenticationResponse;
-import xyz.kristo.projectx.smartid.model.CreateAccountRequest;
-import xyz.kristo.projectx.smartid.model.FindAccountByIdRequest;
 import xyz.kristo.projectx.smartid.model.SmartIdAuthenticationMethod;
 import xyz.kristo.projectx.smartid.model.SmartIdDoLoginRequest;
 import xyz.kristo.projectx.smartid.model.SmartIdDoRegisterRequest;
@@ -36,30 +38,29 @@ import xyz.kristo.projectx.smartid.model.SmartIdInitLoginRequest;
 import xyz.kristo.projectx.smartid.model.SmartIdInitRegisterRequest;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Service
 @Transactional
 @Slf4j
 public class SmartIdService {
     private final SmartIdDao smartIdDao;
-    private final AccountService accountService;
-    private final AuthService authService;
+    private final AccountClient accountClient;
+    private final AuthClient authClient;
     private final SmartIdClient smartIdClient;
     private final SmartIdRestConnector smartIdRestConnector;
     private final AuthenticationResponseValidator responseValidator;
     private final String certificateLevel;
 
     public SmartIdService(SmartIdDao smartIdDao,
-                          AccountService accountService,
-                          AuthService authService,
+                          AccountClient accountClient,
+                          AuthClient authClient,
                           SmartIdClient smartIdClient,
                           SmartIdRestConnector smartIdRestConnector,
                           AuthenticationResponseValidator responseValidator,
                           @Value("${smartId.certificateLevel}") String certificateLevel) {
         this.smartIdDao = smartIdDao;
-        this.accountService = accountService;
-        this.authService = authService;
+        this.accountClient = accountClient;
+        this.authClient = authClient;
         this.smartIdClient = smartIdClient;
         this.smartIdRestConnector = smartIdRestConnector;
         this.responseValidator = responseValidator;
@@ -79,7 +80,7 @@ public class SmartIdService {
             throw new BusinessException("Your Smart-ID account is not linked to any account!");
         }
 
-        Account account = accountService.findAccountById(new FindAccountByIdRequest(method.getAccountId()));
+        Account account = accountClient.findAccountById(new FindAccountByIdRequest(method.getAccountId()));
 
         if (account == null) {
             throw new BusinessException("Account not found!");
@@ -89,14 +90,15 @@ public class SmartIdService {
     }
 
     public SmartIdInitResponse initRegister(SmartIdInitRegisterRequest request) {
-        accountService.validateAccountData(new CreateAccountRequest(request.getUsername(), request.getEmail()));
+        accountClient.validateAccountData(new CreateAccountRequest(request.getUsername(), request.getEmail()));
         return initAuthentication(request.getCountryCode(), request.getIdentityCode());
     }
 
     public AuthenticationResponse doRegister(SmartIdDoRegisterRequest request) {
         AuthenticationIdentity identity = doAuthentication(request.getSessionId(), request.getAuthenticationHash());
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest(request.getUsername(), request.getEmail());
 
-        accountService.validateAccountData(new CreateAccountRequest(request.getUsername(), request.getEmail()));
+        accountClient.validateAccountData(createAccountRequest);
 
         SmartIdAuthenticationMethod method = smartIdDao.findSmartIdAuthenticationMethod(
                 new SmartIdAuthenticationMethod(identity.getCountry(), identity.getIdentityCode()));
@@ -105,9 +107,7 @@ public class SmartIdService {
             throw new BusinessException("Your Smart-ID account is already linked to another account!");
         }
 
-        Account account = accountService.createAccount(
-                new CreateAccountRequest(request.getUsername(), request.getEmail())
-        );
+        Account account = accountClient.createAccount(createAccountRequest);
 
         smartIdDao.createSmartIdAuthenticationMethod(
                 account.getAccountId(), new SmartIdAuthenticationMethod(identity.getCountry(), identity.getIdentityCode()));
@@ -173,7 +173,7 @@ public class SmartIdService {
     }
 
     private AuthenticationResponse authenticate(Account account) {
-        return authService.authenticate(
+        return authClient.authenticate(
                 new AuthenticationRequest(account.getAccountId(), account.getUsername(), account.getEmail())
         );
     }

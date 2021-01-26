@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.kristo.projectx.mobileid.model.AuthenticationResponse;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
 import xyz.kristo.projectx.mobileid.model.MobileIdDoLoginRequest;
 import xyz.kristo.projectx.mobileid.model.MobileIdDoRegisterRequest;
 import xyz.kristo.projectx.mobileid.model.MobileIdInitResponse;

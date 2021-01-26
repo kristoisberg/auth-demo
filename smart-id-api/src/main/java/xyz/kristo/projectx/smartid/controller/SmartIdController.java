@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.kristo.projectx.smartid.model.AuthenticationResponse;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
 import xyz.kristo.projectx.smartid.model.SmartIdDoLoginRequest;
 import xyz.kristo.projectx.smartid.model.SmartIdDoRegisterRequest;
 import xyz.kristo.projectx.smartid.model.SmartIdInitResponse;

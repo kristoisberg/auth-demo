@@ -5,13 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.kristo.projectx.account.client.AccountClient;
+import xyz.kristo.projectx.account.client.dto.Account;
+import xyz.kristo.projectx.account.client.dto.CreateAccountRequest;
+import xyz.kristo.projectx.account.client.dto.FindAccountByUsernameOrEmailRequest;
+import xyz.kristo.projectx.auth.client.AuthClient;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationRequest;
+import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
 import xyz.kristo.projectx.password.dao.PasswordDao;
 import xyz.kristo.projectx.password.exception.BusinessException;
-import xyz.kristo.projectx.password.model.Account;
-import xyz.kristo.projectx.password.model.AuthenticationRequest;
-import xyz.kristo.projectx.password.model.AuthenticationResponse;
-import xyz.kristo.projectx.password.model.CreateAccountRequest;
-import xyz.kristo.projectx.password.model.FindAccountByUsernameOrEmailRequest;
 import xyz.kristo.projectx.password.model.PasswordAuthenticationMethod;
 import xyz.kristo.projectx.password.model.PasswordLoginRequest;
 import xyz.kristo.projectx.password.model.PasswordRegisterRequest;
@@ -22,11 +24,11 @@ import xyz.kristo.projectx.password.model.PasswordRegisterRequest;
 @RequiredArgsConstructor
 public class PasswordService {
     private final PasswordDao passwordDao;
-    private final AccountService accountService;
-    private final AuthService authService;
+    private final AccountClient accountClient;
+    private final AuthClient authClient;
 
     public AuthenticationResponse login(PasswordLoginRequest request) {
-        Account account = accountService.findAccountByUsernameOrEmail(
+        Account account = accountClient.findAccountByUsernameOrEmail(
                 new FindAccountByUsernameOrEmailRequest(request.getUsernameOrEmail())
         );
 
@@ -44,7 +46,7 @@ public class PasswordService {
     }
 
     public AuthenticationResponse register(PasswordRegisterRequest request) {
-        Account account = accountService.createAccount(
+        Account account = accountClient.createAccount(
                 new CreateAccountRequest(request.getUsername(), request.getEmail())
         );
 
@@ -55,7 +57,7 @@ public class PasswordService {
     }
 
     private AuthenticationResponse authenticate(Account account) {
-        return authService.authenticate(
+        return authClient.authenticate(
                 new AuthenticationRequest(account.getAccountId(), account.getUsername(), account.getEmail())
         );
     }
