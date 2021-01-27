@@ -5,9 +5,9 @@ import yup from "form/yup";
 import TextInput from "form/text-input";
 import PasswordInput from "form/password-input";
 import SubmitButton from "form/submit-button";
-import authenticate from "../../../auth/authenticate";
-import useFetch from "../../../fetch/useFetch";
-import ApiUrl from "../../../fetch/ApiUrl";
+import authenticate from "../../auth/authenticate";
+import useFetch from "../../fetch/useFetch";
+import ApiUrl from "../../fetch/ApiUrl";
 
 const validationSchema = yup.object({
   username: yup.string().required().min(3).max(32),
