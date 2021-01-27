@@ -16,7 +16,7 @@ Tabs.propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
       code: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      name: PropTypes.node.isRequired,
       component: PropTypes.elementType.isRequired,
     })
   ).isRequired,
