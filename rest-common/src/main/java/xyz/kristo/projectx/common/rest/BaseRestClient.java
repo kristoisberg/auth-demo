@@ -5,6 +5,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class BaseRestClient {
@@ -18,18 +19,60 @@ public abstract class BaseRestClient {
         this.serviceUrl = serviceUrl;
     }
 
-    protected <T> void post(String endpoint, T entity) {
-        validate(entity);
-        restTemplate.postForLocation(getEndpointUrl(endpoint), entity);
+    protected <TResult> TResult get(String endpoint, Class<TResult> resultType, Object... params) {
+        return restTemplate.getForObject(getEndpointUrl(endpoint), resultType, params);
     }
 
-    protected <T, K> K post(String endpoint, T entity, Class<K> resultType) {
-        validate(entity);
-        return restTemplate.postForObject(getEndpointUrl(endpoint), entity, resultType);
+    protected <TResult> TResult get(String endpoint, Class<TResult> resultType, Map<String, ?> params) {
+        return restTemplate.getForObject(getEndpointUrl(endpoint), resultType, params);
     }
 
-    private <T> void validate(T entity) {
-        Set<ConstraintViolation<T>> violations = validator.validate(entity);
+    protected <TEntity> void post(String endpoint, TEntity entity, Object... params) {
+        validate(entity);
+        restTemplate.postForLocation(getEndpointUrl(endpoint), entity, params);
+    }
+
+    protected <TEntity> void post(String endpoint, TEntity entity, Map<String, ?> params) {
+        validate(entity);
+        restTemplate.postForLocation(getEndpointUrl(endpoint), entity, params);
+    }
+
+    protected <TEntity, TResult> TResult post(String endpoint,
+                                              TEntity entity,
+                                              Class<TResult> resultType,
+                                              Object... params) {
+        validate(entity);
+        return restTemplate.postForObject(getEndpointUrl(endpoint), entity, resultType, params);
+    }
+
+    protected <TEntity, TResult> TResult post(String endpoint,
+                                              TEntity entity,
+                                              Class<TResult> resultType,
+                                              Map<String, ?> params) {
+        validate(entity);
+        return restTemplate.postForObject(getEndpointUrl(endpoint), entity, resultType, params);
+    }
+
+    protected <TEntity> void put(String endpoint, TEntity entity, Object... params) {
+        validate(entity);
+        restTemplate.put(getEndpointUrl(endpoint), entity, params);
+    }
+
+    protected <TEntity> void put(String endpoint, TEntity entity, Map<String, ?> params) {
+        validate(entity);
+        restTemplate.put(getEndpointUrl(endpoint), entity, params);
+    }
+
+    protected void delete(String endpoint, Object... params) {
+        restTemplate.delete(getEndpointUrl(endpoint), params);
+    }
+
+    protected void delete(String endpoint, Map<String, ?> params) {
+        restTemplate.delete(getEndpointUrl(endpoint), params);
+    }
+
+    private <TEntity> void validate(TEntity entity) {
+        Set<ConstraintViolation<TEntity>> violations = validator.validate(entity);
 
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
