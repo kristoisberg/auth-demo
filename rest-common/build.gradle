@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    api group: 'org.springframework', name: 'spring-web', version: '5.3.3'
+    api group: 'org.springframework', name: 'spring-web', version: '5.3.4'
 
     api group: 'jakarta.validation', name: 'jakarta.validation-api', version: '2.0.2'
 }
