@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.kristo.projectx.account.client.AccountClient;
 import xyz.kristo.projectx.account.client.dto.Account;
 import xyz.kristo.projectx.account.client.dto.CreateAccountRequest;
-import xyz.kristo.projectx.account.client.dto.FindAccountByIdRequest;
 import xyz.kristo.projectx.auth.client.AuthClient;
 import xyz.kristo.projectx.auth.client.dto.AuthenticationRequest;
 import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
@@ -80,7 +79,7 @@ public class SmartIdService {
             throw new BusinessException("Your Smart-ID account is not linked to any account!");
         }
 
-        Account account = accountClient.findAccountById(new FindAccountByIdRequest(method.getAccountId()));
+        Account account = accountClient.findAccountById(method.getAccountId());
 
         if (account == null) {
             throw new BusinessException("Account not found!");

@@ -9,8 +9,6 @@ import xyz.kristo.projectx.account.exception.BusinessException;
 import xyz.kristo.projectx.account.exception.NotFoundException;
 import xyz.kristo.projectx.account.model.Account;
 import xyz.kristo.projectx.account.model.CreateAccountRequest;
-import xyz.kristo.projectx.account.model.FindAccountByIdRequest;
-import xyz.kristo.projectx.account.model.FindAccountByUsernameOrEmailRequest;
 
 @Service
 @Transactional
@@ -19,8 +17,8 @@ import xyz.kristo.projectx.account.model.FindAccountByUsernameOrEmailRequest;
 public class AccountService {
     private final AccountDao accountDao;
 
-    public Account findAccountByUsernameOrEmail(FindAccountByUsernameOrEmailRequest request) {
-        Account account = accountDao.findAccountByUsernameOrEmail(request.getUsernameOrEmail());
+    public Account findAccountByUsernameOrEmail(String usernameOrEmail) {
+        Account account = accountDao.findAccountByUsernameOrEmail(usernameOrEmail);
 
         if (account == null) {
             throw new NotFoundException("Account not found!");
@@ -29,8 +27,8 @@ public class AccountService {
         return account;
     }
 
-    public Account findAccountById(FindAccountByIdRequest request) {
-        Account account = accountDao.findAccountById(request.getAccountId());
+    public Account findAccountById(Long accountId) {
+        Account account = accountDao.findAccountById(accountId);
 
         if (account == null) {
             throw new NotFoundException("Account not found!");

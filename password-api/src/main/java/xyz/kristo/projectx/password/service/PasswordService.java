@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.kristo.projectx.account.client.AccountClient;
 import xyz.kristo.projectx.account.client.dto.Account;
 import xyz.kristo.projectx.account.client.dto.CreateAccountRequest;
-import xyz.kristo.projectx.account.client.dto.FindAccountByUsernameOrEmailRequest;
 import xyz.kristo.projectx.auth.client.AuthClient;
 import xyz.kristo.projectx.auth.client.dto.AuthenticationRequest;
 import xyz.kristo.projectx.auth.client.dto.AuthenticationResponse;
@@ -28,10 +27,7 @@ public class PasswordService {
     private final AuthClient authClient;
 
     public AuthenticationResponse login(PasswordLoginRequest request) {
-        Account account = accountClient.findAccountByUsernameOrEmail(
-                new FindAccountByUsernameOrEmailRequest(request.getUsernameOrEmail())
-        );
-
+        Account account = accountClient.findAccountByUsernameOrEmail(request.getUsernameOrEmail());
         PasswordAuthenticationMethod method = passwordDao.findPasswordAuthenticationMethod(account.getAccountId());
 
         if (method == null) {
