@@ -19,8 +19,13 @@ The repository consists of the following projects:
 - account-api-client - REST client library for account-api, used by password-api, mobile-id-api and smart-id-api
 - rest-common - Base library for REST client libraries, used by auth-api-client and account-api-client
 
+### Component relationships
+
+![component-relationships](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/kristoisberg/auth-demo/master/component-relationships.iuml)
+
 ## Future plans
 
 - Estonian ID-Card authentication
 - Multiple authentication methods per account
 - Authorization (roles and privileges)
+- An actual purpose for this project

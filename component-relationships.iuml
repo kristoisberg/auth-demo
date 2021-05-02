@@ -1,0 +1,33 @@
+@startuml project-x
+
+title Component relationships
+
+[rest-common] as RestCommon
+[account-api-client] as AccountApiClient
+[auth-api-client] as AuthApiClient
+[auth-api] as AuthApi
+[account-api] as AccountApi
+[password-api] as PasswordApi
+[mobile-id-api] as MobileIdApi
+[smart-id-api] as SmartIdApi
+[project-x-ui] as UI
+
+[AccountApiClient] <-up- [RestCommon]
+[AuthApiClient] <-up- [RestCommon]
+
+[PasswordApi] <..> UI
+[MobileIdApi] <..> UI
+[SmartIdApi] <..> UI
+
+[AuthApi] <...left...> [AuthApiClient]
+[AccountApi] <...right...> [AccountApiClient]
+
+[AuthApiClient] --> [PasswordApi]
+[AuthApiClient] --> [MobileIdApi]
+[AuthApiClient] --> [SmartIdApi]
+
+[AccountApiClient] --> [PasswordApi]
+[AccountApiClient] --> [MobileIdApi]
+[AccountApiClient] --> [SmartIdApi]
+
+@enduml
