@@ -1,5 +1,8 @@
 @startuml project-x
 
+skinparam monochrome true
+skinparam componentStyle rectangle
+
 [rest-common] as RestCommon
 [account-api-client] as AccountApiClient
 [auth-api-client] as AuthApiClient
