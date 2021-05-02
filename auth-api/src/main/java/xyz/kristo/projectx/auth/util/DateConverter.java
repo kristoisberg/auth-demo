@@ -6,15 +6,17 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class DateConverter {
-    private static final ZoneId zoneId = ZoneId.systemDefault();
+    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
 
-    private DateConverter() {}
+    private DateConverter() {
+        throw new IllegalAccessError("Utility class can not be instantiated");
+    }
 
     public static Date asDate(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(zoneId).toInstant());
+        return Date.from(localDateTime.atZone(ZONE_ID).toInstant());
     }
 
     public static LocalDateTime asLocalDateTime(Date date) {
-        return Instant.ofEpochMilli(date.getTime()).atZone(zoneId).toLocalDateTime();
+        return Instant.ofEpochMilli(date.getTime()).atZone(ZONE_ID).toLocalDateTime();
     }
 }

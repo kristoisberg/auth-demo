@@ -11,9 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PasswordAuthenticationMethod {
     private Long accountId;
-    private String password;
+    private String passwordHash;
 
-    public PasswordAuthenticationMethod(String password) {
-        this.password = password;
+    public PasswordAuthenticationMethod(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }

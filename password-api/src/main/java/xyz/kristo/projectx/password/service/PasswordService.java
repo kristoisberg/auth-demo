@@ -16,6 +16,9 @@ import xyz.kristo.projectx.password.exception.BusinessException;
 import xyz.kristo.projectx.password.model.PasswordAuthenticationMethod;
 import xyz.kristo.projectx.password.model.PasswordLoginRequest;
 import xyz.kristo.projectx.password.model.PasswordRegisterRequest;
+import xyz.kristo.projectx.password.util.ArrayConverter;
+
+import java.util.Arrays;
 
 @Service
 @Transactional
@@ -34,7 +37,13 @@ public class PasswordService {
             throw new BusinessException("Account does not support password authentication!");
         }
 
-        if (!BCrypt.checkpw(request.getPassword(), method.getPassword())) {
+        byte[] password = ArrayConverter.toBytes(request.getPassword());
+        boolean correctPassword = BCrypt.checkpw(password, method.getPasswordHash());
+
+        Arrays.fill(request.getPassword(), '\u0000');
+        Arrays.fill(password, (byte) 0);
+
+        if (!correctPassword) {
             throw new BusinessException("Invalid password!");
         }
 
@@ -46,8 +55,14 @@ public class PasswordService {
                 new CreateAccountRequest(request.getUsername(), request.getEmail())
         );
 
-        String password = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
-        passwordDao.createPasswordAuthenticationMethod(account.getAccountId(), new PasswordAuthenticationMethod(password));
+        byte[] password = ArrayConverter.toBytes(request.getPassword());
+        String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
+
+        passwordDao.createPasswordAuthenticationMethod(
+                account.getAccountId(), new PasswordAuthenticationMethod(passwordHash));
+
+        Arrays.fill(request.getPassword(), '\u0000');
+        Arrays.fill(password, (byte) 0);
 
         return authenticate(account);
     }

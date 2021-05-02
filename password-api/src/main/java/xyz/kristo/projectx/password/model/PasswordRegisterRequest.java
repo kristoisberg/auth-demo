@@ -16,5 +16,5 @@ public class PasswordRegisterRequest {
 
     @NotNull
     @Size(min = 10)
-    private String password;
+    private char[] password;
 }

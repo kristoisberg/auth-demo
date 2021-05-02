@@ -15,5 +15,5 @@ public class PasswordLoginRequest {
 
     @NotNull
     @NotEmpty
-    private String password;
+    private char[] password;
 }

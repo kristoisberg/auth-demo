@@ -11,7 +11,9 @@ public class JdbcUrlConverter {
             "postgres", "postgresql"
     );
 
-    private JdbcUrlConverter() {}
+    private JdbcUrlConverter() {
+        throw new IllegalAccessError("Utility class can not be instantiated");
+    }
 
     public static String convert(@NonNull String url) {
         if (url.startsWith("jdbc:")) {
