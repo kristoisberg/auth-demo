@@ -1,0 +1,25 @@
+rootProject.name = 'project-x'
+
+include 'rest-common'
+project(':rest-common').name = 'project-x-rest-common'
+
+include 'account-api'
+project(':account-api').name = 'project-x-account-api'
+
+include 'auth-api'
+project(':auth-api').name = 'project-x-auth-api'
+
+include 'password-api'
+project(':password-api').name = 'project-x-password-api'
+
+include 'mobile-id-api'
+project(':mobile-id-api').name = 'project-x-mobile-id-api'
+
+include 'smart-id-api'
+project(':smart-id-api').name = 'project-x-smart-id-api'
+
+include 'account-api-client'
+project(':account-api-client').name = 'project-x-account-api-client'
+
+include 'auth-api-client'
+project(':auth-api-client').name = 'project-x-auth-api-client'

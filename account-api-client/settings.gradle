@@ -1,2 +1,1 @@
-rootProject.name = 'account-api-client'
-
+includeBuild '..\\rest-common'

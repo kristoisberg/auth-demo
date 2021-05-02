@@ -1,22 +1,13 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'io.freefair.lombok' version '5.3.0'
-}
-
-group 'xyz.kristo.projectx'
-version '1.0.0'
-
-sourceCompatibility = 11
-targetCompatibility = 11
-
-repositories {
-    mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
-    api group: 'xyz.kristo.projectx', name: 'rest-common', version: '1.0.0'
+    api group: project.group, name: 'rest-common'
+
+    implementation group: 'org.projectlombok', name: 'lombok'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok'
 }
 
 publishing {

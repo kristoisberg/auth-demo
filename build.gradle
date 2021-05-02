@@ -1,0 +1,74 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+allprojects {
+    group projectGroup
+    version projectVersion
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+subprojects {
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        dependencies {
+            dependency group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+            dependency group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
+            dependency group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
+            dependency group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion
+
+            dependency group: 'org.springframework', name: 'spring-jdbc', version: '5.3.6'
+            dependency group: 'org.springframework', name: 'spring-web', version: '5.3.6'
+
+            dependency group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.4.6'
+
+            dependency group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
+            dependency group: 'org.mybatis', name: 'mybatis', version: '3.5.7'
+            dependency group: 'org.mybatis', name: 'mybatis-spring', version: '2.0.6'
+            dependency group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-autoconfigure', version: '2.1.4'
+            dependency group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
+            dependency group: 'org.liquibase', name: 'liquibase-core', version: '4.3.5'
+
+            dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+            dependency group: 'commons-io', name: 'commons-io', version: '2.8.0'
+
+            dependency group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+            dependency group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+
+            dependency group: 'ee.sk.mid', name: 'mid-rest-java-client', version: '1.3'
+            dependency group: 'ee.sk.smartid', name: 'smart-id-java-client', version: '2.0'
+            dependency group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '2.34'
+
+            dependency group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+            dependency group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+            dependency group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+            dependency group: 'jakarta.validation', name: 'jakarta.validation-api', version: '2.0.2'
+
+            dependency group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+
+            dependency group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.1'
+            dependency group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
+            dependency group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.9.0'
+            dependency group: 'org.assertj', name: 'assertj-core', version: '3.19.0'
+            dependency group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter-test', version: '2.1.4'
+            dependency group: 'org.testcontainers', name: 'testcontainers', version: testcontainersVersion
+            dependency group: 'org.testcontainers', name: 'junit-jupiter', version: testcontainersVersion
+            dependency group: 'org.testcontainers', name: 'postgresql', version: testcontainersVersion
+
+            dependency group: projectGroup, name: 'rest-common', version: projectVersion
+            dependency group: projectGroup, name: 'auth-api-client', version: projectVersion
+            dependency group: projectGroup, name: 'account-api-client', version: projectVersion
+        }
+    }
+}

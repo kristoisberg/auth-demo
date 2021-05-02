@@ -1,2 +1,2 @@
-rootProject.name = 'mobile-id-api'
-
+includeBuild '..\\account-api-client'
+includeBuild '..\\auth-api-client'
