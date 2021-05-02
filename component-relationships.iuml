@@ -13,12 +13,12 @@
 [AccountApiClient] <-up- [RestCommon]
 [AuthApiClient] <-up- [RestCommon]
 
-[PasswordApi] <..> UI
-[MobileIdApi] <..> UI
-[SmartIdApi] <..> UI
+[PasswordApi] ..> UI
+[MobileIdApi] ..> UI
+[SmartIdApi] ..> UI
 
-[AuthApi] <.left.> [AuthApiClient]
-[AccountApi] <.right.> [AccountApiClient]
+[AuthApi] .left.> [AuthApiClient]
+[AccountApi] .right.> [AccountApiClient]
 
 [AuthApiClient] --> [PasswordApi]
 [AuthApiClient] --> [MobileIdApi]
