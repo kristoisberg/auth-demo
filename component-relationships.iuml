@@ -1,7 +1,5 @@
 @startuml project-x
 
-title Component relationships
-
 [rest-common] as RestCommon
 [account-api-client] as AccountApiClient
 [auth-api-client] as AuthApiClient
@@ -19,8 +17,8 @@ title Component relationships
 [MobileIdApi] <..> UI
 [SmartIdApi] <..> UI
 
-[AuthApi] <...left...> [AuthApiClient]
-[AccountApi] <...right...> [AccountApiClient]
+[AuthApi] <.left.> [AuthApiClient]
+[AccountApi] <.right.> [AccountApiClient]
 
 [AuthApiClient] --> [PasswordApi]
 [AuthApiClient] --> [MobileIdApi]
