@@ -23,6 +23,8 @@ The repository consists of the following projects:
 
 ![component-relationships](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/kristoisberg/auth-demo/master/component-relationships.iuml)
 
+(The graph above could be out of date due to the PlantUML proxy caching it)
+
 A continuous arrow marks a Gradle or npm dependency, the arrow points towards the component dependent on the other component. A dashed arrow marks an client-API relationship, the arrow points towards the client.
 
 ## Future plans
